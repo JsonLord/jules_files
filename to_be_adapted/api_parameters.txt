@@ -1,0 +1,9 @@
+#Huggingface data 
+{name_space} {profile} {hf token}
+
+#api list overview
+
+
+
+#API documentation external services 
+Gradio 
