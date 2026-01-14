@@ -1,0 +1,46 @@
+pip install https://huggingface.co/spaces/Wauplin/gradio_logsview/resolve/main/gradio_logsview-0.0.5-py3-none-any.whl
+or add this line to your requirements.txt:
+
+
+gradio_logsview@https://huggingface.co/spaces/Wauplin/gradio_logsview/resolve/main/gradio_logsview-0.0.5-py3-none-any.whl
+How to run Python code?
+With LogsView.run_python, you can run Python code in a separate process and capture logs in real-time. You can configure which logs to capture (log level and logger name).
+
+
+from gradio_logsview import LogsView
+
+def fn_python():
+    # Run `my_function` in a separate process
+    # All logs above `INFO` level will be captured and displayed in real-time.
+    runner = LogsViewRunner() # Initialize the runner
+    yield from runner.run_python(my_function, log_level=logging.INFO, arg1="value1")
+    yield runner.log(f"Runner: {runner}") # Log any message
+    if runner.exit_code != 0:
+        # Handle error
+        ...
+
+with gr.Blocks() as demo:
+    logs = LogsView()
+    btn = gr.Button("Run Python code")
+    btn.click(fn_python, outputs=logs)
+How to run a command?
+With LogsView.run_command, you can run a command on the system and capture logs from the process in real-time.
+
+
+from gradio_logsview import LogsView
+
+def fn_command():
+    # Run a command and capture all logs from the subprocess
+    runner = LogsViewRunner() # Initialize the runner
+    yield from runner.run_command(
+        ["mergekit-yaml", "config.yaml", "merge", "--copy-", "--cuda", "--low-cpu-memory"]
+    )
+    yield runner.log(f"Runner: {runner}") # Log any message
+    if runner.exit_code != 0:
+        # Handle error
+        ...
+
+with gr.Blocks() as demo:
+    logs = LogsView()
+    btn = gr.Button("Run command")
+    btn.click(fn_command, outputs=logs)
